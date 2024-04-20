@@ -58,6 +58,7 @@ const updateProductController = async (req, res) => {
     });
   }
 };
+
 const deleteProductController = async (req, res) => {
   try {
     const productId = req.params.id;
@@ -88,11 +89,23 @@ const deleteProductController = async (req, res) => {
 
 const allProductsController = async (req, res) => {
   try {
-    const products = await productModel.find({});
-    if (!products) {
+    const searchQuery = req.query.q; // Assuming the search term is passed as a query parameter named 'q'
+    let products;
+
+    if (searchQuery) {
+      // If a search term is provided, search for products whose name contains the search term
+      products = await productModel.find({
+        name: { $regex: searchQuery, $options: "i" },
+      });
+    } else {
+      // If no search term is provided, retrieve all products
+      products = await productModel.find({});
+    }
+
+    if (!products || products.length === 0) {
       return res
         .status(200)
-        .send({ success: false, message: "No product found" });
+        .send({ success: false, message: "No products found" });
     }
 
     return res
