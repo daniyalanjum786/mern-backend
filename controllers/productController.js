@@ -27,6 +27,65 @@ const createProductController = async (req, res) => {
   }
 };
 
+const updateProductController = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      productId,
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(200).send({
+        success: false,
+        message: "something went wrong while updating the product",
+      });
+    }
+
+    return res.status(201).send({
+      success: true,
+      message: "Product details updated",
+      updatedProduct,
+    });
+  } catch (error) {
+    console.log(`updateProductController Error - ${error}`);
+    res.status(500).send({
+      success: false,
+      message: "Error in updateProductController",
+      error,
+    });
+  }
+};
+const deleteProductController = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const deletedProduct = await productModel.findByIdAndDelete(productId);
+
+    if (!deletedProduct) {
+      return res.status(200).send({
+        success: false,
+        message: "something went wrong while delete the product",
+      });
+    }
+
+    return res.status(200).send({
+      success: true,
+      message: "Product deleted successfully",
+      deletedProduct,
+    });
+  } catch (error) {
+    console.log(`deleteProductController Error - ${error}`);
+    res.status(500).send({
+      success: false,
+      message: "Error in deleteProductController",
+      error,
+    });
+  }
+};
+
 const allProductsController = async (req, res) => {
   try {
     const products = await productModel.find({});
@@ -72,7 +131,9 @@ const singleProductController = async (req, res) => {
 };
 
 export {
+  updateProductController,
   createProductController,
   allProductsController,
   singleProductController,
+  deleteProductController,
 };
