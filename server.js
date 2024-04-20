@@ -15,8 +15,10 @@ app.use(express.json());
 
 // importing routes
 import userRoutes from "./routes/userRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/products", productRoutes);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
