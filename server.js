@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
+import cookieParser from "cookie-parser";
 
 // securing variables
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 // using middlewares
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(cookieParser());
 
 // importing routes
 import userRoutes from "./routes/userRoutes.js";
