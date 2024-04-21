@@ -91,6 +91,8 @@ const allProductsController = async (req, res) => {
   try {
     const searchQuery = req.query.q; // Search query parameter
     const categoryFilter = req.query.category; // Category filter parameter
+    const minPrice = parseFloat(req.query.minPrice); // Minimum price parameter
+    const maxPrice = parseFloat(req.query.maxPrice); // Maximum price parameter
     const page = parseInt(req.query.page) || 1; // Page number, default to 1 if not provided
     const pageSize = 3; // Number of products per page
 
@@ -106,13 +108,21 @@ const allProductsController = async (req, res) => {
       query.category = categoryFilter;
     }
 
+    // If minPrice and/or maxPrice are provided, add price range condition to the query object
+    if (!isNaN(minPrice)) {
+      query.price = { $gte: minPrice };
+    }
+    if (!isNaN(maxPrice)) {
+      query.price = { ...query.price, $lte: maxPrice };
+    }
+
     // Count total number of products matching the query
     const totalCount = await productModel.countDocuments(query);
 
     // Calculate skip value based on page number and page size
     const skip = (page - 1) * pageSize;
 
-    // Use the query object to find products that match the search query and/or category filter
+    // Use the query object to find products that match the search query, category filter, and price range
     const products = await productModel.find(query).skip(skip).limit(pageSize);
 
     if (!products || products.length === 0) {
