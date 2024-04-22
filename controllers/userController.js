@@ -82,6 +82,7 @@ const loginController = async (req, res) => {
       success: true,
       message: "Login Successful",
       name: userExists.name,
+      id: userExists._id,
       token: token,
     });
   } catch (error) {
@@ -105,5 +106,20 @@ const logoutController = (req, res) => {
   // Send response indicating successful logout
   res.status(200).send({ success: true, message: "Logout successful" });
 };
+const profileController = async (req, res) => {
+  const id = req.user.id;
 
-export { signUpController, loginController, logoutController };
+  const userDetails = await userModel.findById(id).select("-password");
+
+  return res.status(200).send({
+    success: true,
+    userDetails,
+  });
+};
+
+export {
+  signUpController,
+  loginController,
+  logoutController,
+  profileController,
+};
