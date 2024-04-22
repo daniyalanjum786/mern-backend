@@ -94,6 +94,54 @@ const loginController = async (req, res) => {
     });
   }
 };
+const updateProfileController = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    const userId = req.user.id;
+    // console.log(req.user.email);
+
+    // Optional: Check if the email has changed and if it's taken
+    if (email && email !== req.user.email) {
+      const emailExists = await userModel.findOne({ email });
+      if (emailExists) {
+        return res.status(400).send({
+          success: false,
+          message: "Email already in use by another account.",
+        });
+      }
+    }
+    // Update user
+    const updatedUser = await userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          name,
+          email,
+        },
+        { new: true, runValidators: true }
+      )
+      .select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(`updateProfileController Error - ${error}`);
+    res.status(500).send({
+      success: false,
+      message: "Error in updateProfileController",
+      error,
+    });
+  }
+};
 const logoutController = (req, res) => {
   // Clear token cookie
   res.cookie("token", "", {
@@ -122,4 +170,5 @@ export {
   loginController,
   logoutController,
   profileController,
+  updateProfileController,
 };
