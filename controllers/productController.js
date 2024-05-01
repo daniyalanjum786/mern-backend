@@ -13,6 +13,7 @@ const createProductController = async (req, res) => {
       price,
       images,
       category,
+      user: req.user.id, // this line check which admin add the product
     });
     return res
       .status(201)

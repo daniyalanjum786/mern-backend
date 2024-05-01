@@ -35,6 +35,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Product category required"],
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // to check which admin added the product
+      required: true,
+    },
     // stock: {
     //   type: Number,
     //   default: 1,
