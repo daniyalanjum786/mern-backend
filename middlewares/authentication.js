@@ -19,5 +19,26 @@ const isAuthorized = async (req, res, next) => {
       .send({ success: false, message: "Invalid or expired token" });
   }
 };
+const isAdmin = async (req, res, next) => {
+  try {
+    // Assuming req.user is populated from the authentication middleware
+    const user = req.user;
+    // Check if user exists and if they are an admin
+    if (!user || user.role !== 1) {
+      return res.status(403).send({
+        success: false,
+        message: "Access denied. Only admins can perform this action.",
+      });
+    }
 
-export { isAuthorized };
+    next();
+  } catch (error) {
+    res.status(401).send({
+      success: false,
+      message: "Not authorized",
+      error: error.message,
+    });
+  }
+};
+
+export { isAuthorized, isAdmin };

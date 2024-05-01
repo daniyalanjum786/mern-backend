@@ -83,6 +83,7 @@ const loginController = async (req, res) => {
       message: "Login Successful",
       name: userExists.name,
       id: userExists._id,
+      role: userExists.role,
       token: token,
     });
   } catch (error) {
@@ -164,11 +165,22 @@ const profileController = async (req, res) => {
     userDetails,
   });
 };
+const allUsersController = async (req, res) => {
+  try {
+    const users = await userModel.find({});
 
+    return res.status(200).send({
+      success: true,
+      message: users.length,
+      users,
+    });
+  } catch (error) {}
+};
 export {
   signUpController,
   loginController,
   logoutController,
   profileController,
   updateProfileController,
+  allUsersController,
 };

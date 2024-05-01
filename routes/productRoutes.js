@@ -6,14 +6,19 @@ import {
   updateProductController,
   deleteProductController,
 } from "../controllers/productController.js";
-import { isAuthorized } from "../middlewares/authentication.js";
+import { isAuthorized, isAdmin } from "../middlewares/authentication.js";
 
 const router = express.Router();
 
-router.post("/create", createProductController);
-router.put("/update/:id", updateProductController);
-router.delete("/delete/:id", deleteProductController);
+router.post("/admin/create", isAuthorized, isAdmin, createProductController);
+router.put("/admin/update/:id", isAuthorized, isAdmin, updateProductController);
+router.delete(
+  "/admin/delete/:id",
+  isAuthorized,
+  isAdmin,
+  deleteProductController
+);
 
-router.get("/all", isAuthorized, allProductsController);
+router.get("/all", allProductsController);
 router.get("/product/:id", singleProductController);
 export default router;
