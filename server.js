@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // securing variables
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 
 // using middlewares
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 

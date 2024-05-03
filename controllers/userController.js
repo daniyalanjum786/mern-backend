@@ -6,13 +6,15 @@ const signUpController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      return res.send({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .send({ success: false, message: "All fields are required" });
     }
     // check existing user
     const userExists = await userModel.findOne({ email });
     if (userExists) {
       return res
-        .status(200)
+        .status(409)
         .send({ success: false, message: "Email already registered" });
     }
     // hashing password
@@ -45,14 +47,16 @@ const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.send({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .send({ success: false, message: "All fields are required" });
     }
     // console.log(email, password);
     // check existing user
     const userExists = await userModel.findOne({ email });
     if (!userExists) {
       return res
-        .status(404)
+        .status(401)
         .send({ success: false, message: "Email does not exists" });
     }
     const matchPassword = await comparePassword(password, userExists.password);
