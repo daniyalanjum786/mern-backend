@@ -74,15 +74,12 @@ const loginController = async (req, res) => {
         // expiresIn: "7d",
       }
     );
+    const tokenOptions = {
+      httpOnly: true,
+      secure: true,
+    };
     // Set token in cookies
-    res.cookie("token", token, {
-      httpOnly: true, // Cookie is only accessible via HTTP(S)
-      secure: true, // Cookie is only sent over HTTPS
-      sameSite: "strict", // Cookie is not sent on cross-origin requests
-      maxAge: process.env.COOKIE_EXP * 24 * 60 * 60 * 1000, // 7 days expiration (in milliseconds)
-    });
-
-    return res.status(201).send({
+    return res.cookie("token", token, tokenOptions).status(200).send({
       success: true,
       message: "Login Successful",
       name: userExists.name,
