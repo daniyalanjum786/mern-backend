@@ -26,7 +26,7 @@ const isAdmin = async (req, res, next) => {
     if (!user || user.role !== 1) {
       return res.status(403).send({
         success: false,
-        message: "Access denied. Only admins can perform this action.",
+        message: "Sorry! You can not access this page",
       });
     }
 

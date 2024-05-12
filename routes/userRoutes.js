@@ -18,6 +18,6 @@ router.put("/profile/update", isAuthorized, updateProfileController);
 router.get("/logout", logoutController);
 
 // Admin Routes - Protected
-router.get("/admin/allusers", isAuthorized, isAdmin, allUsersController);
+router.get("/admin/all-users", isAuthorized, isAdmin, allUsersController);
 
 export default router;

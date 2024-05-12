@@ -132,9 +132,13 @@ const allProductsController = async (req, res) => {
         .send({ success: false, message: "No products found" });
     }
 
-    return res
-      .status(200)
-      .send({ success: true, total: totalCount, page, pageSize, products });
+    return res.status(200).send({
+      success: true,
+      total: totalCount,
+      page,
+      pageSize,
+      productsArr: products,
+    });
   } catch (error) {
     console.log(`allProductsController Error - ${error}`);
     res.status(500).send({

@@ -175,7 +175,9 @@ const allUsersController = async (req, res) => {
       message: users.length,
       users,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 export {
   signUpController,
