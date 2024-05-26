@@ -172,7 +172,8 @@ const allUsersController = async (req, res) => {
 
     return res.status(200).send({
       success: true,
-      message: users.length,
+      message: "All Users",
+      total: users.length,
       users,
     });
   } catch (error) {
